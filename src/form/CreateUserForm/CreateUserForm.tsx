@@ -4,9 +4,12 @@ import { FaFacebook } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaApple } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
-import {z , ZodType} from 'zod'
+import {z,ZodType} from 'zod'
 import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
+import { fetchUserData } from '../../../http';
+import { authContext } from '../../store/storeProvider/CommentProvider';
+import { useContext } from 'react';
 
 
 type UserFormType = {
@@ -16,30 +19,36 @@ type UserFormType = {
     email : string,
 }
 
+const schema:ZodType<UserFormType> = z.object({
+    username : z.string().max(30).min(3),
+    password : z.string().min(5).max(30),
+    cpassword : z.string(),
+    email : z.string().email('Enter a Valid email ')
+}).refine(data=>data.cpassword === data.password ,{
+    message : "Password and Comfirm Password does not match !",
+    path : ['cpassword']
+});
+
+
 const CreateUserForm = () => {
-    const schema:ZodType<UserFormType> = z.object({
-        username : z.string().max(30).min(3),
-        password : z.string().min(5).max(30),
-        cpassword : z.string(),
-        email : z.string().email('Enter a Valid email ')
-    }).refine(data=>data.cpassword === data.password ,{
-        message : "Password and Comfirm Password does not match !",
-        path : ['cpassword']
-    });
+
+    const {login} = useContext(authContext);
 
     const {register,handleSubmit,reset,formState:{errors}} = useForm<UserFormType>({
         resolver : zodResolver(schema)
     })
 
     const onSubmitLogin = async (data:UserFormType)=>{
-        /* try{
-            const response = await createUser(data)
+        try{
+            const response = await fetchUserData(data)
             console.log(response)
+            login(response)
+            localStorage.setItem('user',JSON.stringify(response))
         }catch(error){
+            alert(error)
             console.log(error)
         }
-        reset() */
-        
+        reset()
     }
     return (
         <div className='createuser-form-container'>

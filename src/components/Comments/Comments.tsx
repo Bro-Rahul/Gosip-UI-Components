@@ -8,8 +8,7 @@ import { authContext } from '../../store/storeProvider/CommentProvider.js';
 import "../../../global.css"
 
 const Comments: React.FC<{id:string}> = (props) => {
-  const data = useContext<string>(authContext)
-
+  const {key} = useContext(authContext);
 
   const [response, setResponse] = useState<PostComments>();
   const [dataloaded, setDataLoaded] = useState(false)
@@ -18,13 +17,13 @@ const Comments: React.FC<{id:string}> = (props) => {
     const getComments = async() =>{
         try{
           const userDetaile = {
-            key : data,
+            key : key,
             identity : props.id
           } 
           console.log(userDetaile)
           const responseData = await fetchPostComments(userDetaile);
           setResponse(responseData);
-          console.log(data)
+          console.log(key)
         }catch(err){
           setError(true);
         }finally{
