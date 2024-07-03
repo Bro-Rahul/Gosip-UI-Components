@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import UserComments from '../../form/UserComments/UserComments.js';
-import { PostComments } from '../../model/index.js';
-import { fetchPostComments } from '../../../http.js';
+import React from 'react';
+import UserComments from '../../form/UserComments/UserComments';
 import CommentForm from '../../form/CommentForm';
 import { useContext } from 'react';
-import { authContext } from '../../store/storeProvider/CommentProvider.js';
+import { commentContext } from '../../store/baseProvider/BaseProvider';
 import "../../../global.css"
 
-const Comments: React.FC<{id:string}> = (props) => {
-  const {key} = useContext(authContext);
+const Comments: React.FC= (props) => {
 
-  const [response, setResponse] = useState<PostComments>();
+  const {comments} = useContext(commentContext);
+
+  const content = comments.map(item => <UserComments key={item.id} userComment={item}/>)
+
+  /* const [response, setResponse] = useState<PostCommentSchema>();
   const [dataloaded, setDataLoaded] = useState(false)
   const [error, setError] = useState(false)
   useEffect(()=>{
@@ -42,7 +43,7 @@ const Comments: React.FC<{id:string}> = (props) => {
     content = response!.user_post.comments!.map(item=><UserComments key={item.id} userComment={item}/>)
   } else {
     content = "Loading..."
-  }
+  } */
   return (
     <div className='comments-container'>
       <CommentForm />

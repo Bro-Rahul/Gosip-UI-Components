@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useState } from "react";
 
 interface CommentUserData{
   token : string|null,
-  id : number|null,
+  id : number|string,
   username : string|null,
   role : string|null,
   email : string|null,
@@ -19,7 +19,7 @@ export const authContext = createContext<ContextSechema>({
   key : '',
   commenter : {
     email:null,
-    id : null,
+    id : '',
     role :null,
     token :null,
     username :null,
@@ -35,7 +35,7 @@ const CommentProvider: React.FC<{ auth:string,children: ReactNode}> = (props) =>
   if (user===true){
     commenterUser = {
         email:null,
-        id : null,
+        id : '',
         role :null,
         token :null,
         username :null
@@ -65,7 +65,6 @@ const CommentProvider: React.FC<{ auth:string,children: ReactNode}> = (props) =>
   },
   autheticated : authenticate
  });
- console.log(contextValue)
 
   return (
     <authContext.Provider value={contextValue}>

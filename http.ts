@@ -1,6 +1,7 @@
-import {PostComments} from "./src/model";
+import {PostCommentSchema} from "./src/model";
 import { CommentUserData } from "./src/store/storeProvider/CommentProvider";
-import { Comments } from "./src/model/index";
+import { CommentSchema } from "./src/model/index";
+import { AddCommentTypeSchema } from "./src/model";
 
 const baseurl = 'http://127.0.0.1:8000'
 
@@ -10,7 +11,7 @@ interface fetchPostCommentsBody{
     identity:string
 }
 
-export async function fetchPostComments(user:fetchPostCommentsBody):Promise<PostComments> {
+export async function fetchPostComments(user:fetchPostCommentsBody):Promise<PostCommentSchema> {
     const url = 'http://127.0.0.1:8000/posts/get-comments/'
     const response = await fetch(url, {
         method: "POST",
@@ -65,7 +66,7 @@ export async function fetchUserData(data:UserFormType):Promise<CommentUserData>{
 
 
 
-export async function PostCommentsOnThePost(data:any):Promise<Comments>{
+export async function PostCommentsOnThePost(data:AddCommentTypeSchema):Promise<CommentSchema>{
     const url = `${baseurl}/posts-comment/`
     const response = await fetch(url,{
         method:'POST',

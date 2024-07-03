@@ -1,6 +1,6 @@
-interface Comments{
+interface CommentSchema{
     id:number,
-    sub_comments:Comments[],
+    sub_comments:CommentSchema[],
     created_by : number,
     post:number,
     user:string,
@@ -14,21 +14,29 @@ interface Comments{
     upvote : number|null, 
 }
 
-interface Post{
+interface PostSchema{
     id:number,
     body : string,
-    comments : Comments[],
+    comments : CommentSchema[],
     title : string|null,
     image : string|null,
     created_by : number|string
 }
 
-interface PostComments{
-    user_post: Post,
+interface PostCommentSchema{
+    user_post: PostSchema,
     identity : string
 }
 
-
+interface SecretKeyAndIdentitySchema{
+    key : string,
+    identity : string,
+}
+interface AddCommentTypeSchema{
+    created_by:number|string,
+    post : number|string,
+    body : string
+}
 /* interface CommentorData{
     username : string,
     website_url : string|null,
@@ -42,4 +50,4 @@ interface PostComments{
 }
  */
 
-export {PostComments,Comments,Post}
+export {PostCommentSchema,CommentSchema,PostSchema,SecretKeyAndIdentitySchema,AddCommentTypeSchema}

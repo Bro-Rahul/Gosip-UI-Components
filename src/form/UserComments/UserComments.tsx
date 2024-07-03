@@ -4,11 +4,11 @@ import { AiOutlineDislike } from "react-icons/ai";
 import { BsReply } from "react-icons/bs";
 import { CiMenuKebab } from "react-icons/ci";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { Comments } from '../../model';
+import { CommentSchema } from '../../model';
 import CommentForm from '../CommentForm';
 
 
-const UserComments:React.FC<{userComment:Comments}> = (props) => {
+const UserComments:React.FC<{userComment:CommentSchema}> = (props) => {
     const { sub_comments: subComments } = props.userComment;
     const hasSubComments = subComments.length > 0;
     const [showSubComments, SetShowSubComments] = useState(false)    
