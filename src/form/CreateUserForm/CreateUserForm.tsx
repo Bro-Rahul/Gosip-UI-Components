@@ -7,7 +7,6 @@ import { BsTwitterX } from "react-icons/bs";
 import {z , ZodType} from 'zod'
 import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
-import { createUser } from '../../../http';
 
 
 type UserFormType = {
@@ -33,13 +32,14 @@ const CreateUserForm = () => {
     })
 
     const onSubmitLogin = async (data:UserFormType)=>{
-        try{
+        /* try{
             const response = await createUser(data)
             console.log(response)
         }catch(error){
             console.log(error)
         }
-        reset()
+        reset() */
+        
     }
     return (
         <div className='createuser-form-container'>

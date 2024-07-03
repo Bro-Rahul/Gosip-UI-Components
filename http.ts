@@ -1,14 +1,19 @@
-import { PostComments,CommentorData ,PostUserData} from "./src/model";
-
+import {PostComments} from "./src/model";
 
 const baseurl = 'http://127.0.0.1:8000'
-export async function fetchPostComments(slug:string):Promise<PostComments> {
-    const token = "46837b41ec3663c3d4a3caf85f329970390b92f5";  // Your actual token
-    const url = `http://127.0.0.1:8000/thread/${slug}/get-posts-comments`
+
+
+interface fetchPostCommentsBody{
+    key:string,
+    identity:string
+  }
+
+export async function fetchPostComments(user:fetchPostCommentsBody):Promise<PostComments> {
+    const url = 'http://127.0.0.1:8000/posts/get-comments/'
     const response = await fetch(url, {
-        method: "GET",
+        method: "POST",
+        body:JSON.stringify(user),
         headers: {
-            "Authorization": `token ${token}`,  // Correct way to include the token
             "Content-Type": "application/json",
         },
     });
@@ -19,11 +24,12 @@ export async function fetchPostComments(slug:string):Promise<PostComments> {
         throw error;
     }
 
-    return await response.json();
+    const [data] = await response.json();
+    return data
 }
 
 
-export async function createUser(data:PostUserData):Promise<CommentorData>{
+/* export async function createUser(data:PostUserData):Promise<CommentorData>{
     const url = `${baseurl}/users/create-commentor/`
     const response = await fetch(url,{
         method:'POST',
@@ -38,4 +44,4 @@ export async function createUser(data:PostUserData):Promise<CommentorData>{
         throw error
     }
     return response.json()
-}
+} */

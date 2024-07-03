@@ -21,7 +21,7 @@ const UserComments:React.FC<{userComment:Comments}> = (props) => {
     return (
         <section className='usercomments-container'>
             <div className='users-avatar'>
-                {props.userComment.avatar===''?<DefaultImage username={props.userComment.user}/>: <img src={`http://127.0.0.1:8000/media/${props.userComment.avatar}`} alt='user avatar' />}
+                {!props.userComment.profile?<DefaultImage username={props.userComment.user}/>: <img src={`http://127.0.0.1:8000/${props.userComment.profile}`} alt='user avatar' />}
             </div>
             <div className='user-comment-body-container'>
                 <div className='user-comment-username'>
@@ -29,7 +29,7 @@ const UserComments:React.FC<{userComment:Comments}> = (props) => {
                         <span>{props.userComment.user}</span>
                         <p><CiMenuKebab className='user-comment-control' /></p>
                     </div>
-                    <p>{props.userComment.period} ago.</p>
+                    <p>{props.userComment.time_period} ago.</p>
                 </div>
                 <div className='user-comment-body'>
                     <span>{props.userComment.body}</span>

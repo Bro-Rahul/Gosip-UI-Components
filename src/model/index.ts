@@ -4,8 +4,8 @@ interface Comments{
     created_by : number,
     post:number,
     user:string,
-    period : string,
-    avatar:string,
+    time_period : string,
+    profile:string|null,
     created_at : string,
     updated_at : string,
     body : string,
@@ -14,31 +14,32 @@ interface Comments{
     upvote : number|null, 
 }
 
-interface PostComments{
-    sub_url : string,
-    post : {
-        id: number,
-        body : string,
-        comments : Comments[],
-        title : string,
-        image : string,
-        created_by:number,
-    },
-    base_url : string,
-    complete_url : string,
+interface Post{
+    id:number,
+    body : string,
+    comments : Comments[],
+    title : string|null,
+    image : string|null,
+    created_by : number|string
 }
 
-interface CommentorData{
+interface PostComments{
+    user_post: Post,
+    identity : string
+}
+
+
+/* interface CommentorData{
     username : string,
     website_url : string|null,
     email : string|null
-}
+} */
 
-interface PostUserData{
+/* interface PostUserData{
     username : string,
     password : string,
     cpassword : string,
 }
+ */
 
-
-export {PostComments,Comments,CommentorData,PostUserData}
+export {PostComments,Comments,Post}

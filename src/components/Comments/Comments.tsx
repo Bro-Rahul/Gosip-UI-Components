@@ -4,43 +4,48 @@ import { PostComments } from '../../model/index.js';
 import { fetchPostComments } from '../../../http.js';
 import CommentForm from '../../form/CommentForm';
 import { useContext } from 'react';
-import { authContext,AuthenticateUser } from '../../store/storeProvider/CommentProvider.js';
+import { authContext } from '../../store/storeProvider/CommentProvider.js';
 import "../../../global.css"
 
-const Comments:React.FC<{slug:string}>= (props) => {
-  const data = useContext<AuthenticateUser>(authContext)
+const Comments: React.FC<{id:string}> = (props) => {
+  const data = useContext<string>(authContext)
+
 
   const [response, setResponse] = useState<PostComments>();
   const [dataloaded, setDataLoaded] = useState(false)
   const [error, setError] = useState(false)
-  useEffect(() => {
-    const getComments = async () => {
-      try {
-        const comments = await fetchPostComments(props.slug);
-        setResponse(comments);
-        setDataLoaded(true);
-        console.log(comments);
-      } catch (error) {
-        setError(true);
-        setDataLoaded(true);
-        console.error("Error fetching comments:", error);
-      }
-    };
-    getComments();
-  }, []);
+  useEffect(()=>{
+    const getComments = async() =>{
+        try{
+          const userDetaile = {
+            key : data,
+            identity : props.id
+          } 
+          console.log(userDetaile)
+          const responseData = await fetchPostComments(userDetaile);
+          setResponse(responseData);
+          console.log(data)
+        }catch(err){
+          setError(true);
+        }finally{
+          setDataLoaded(true);
+        }
+    }
+    getComments()
+  },[])
 
   let content;
   if (dataloaded && error) {
     content = "an error occur "
     console.log(response)
   } else if (dataloaded && !error) {
-    content = response!.post.comments.map(comment => <UserComments key={comment.id} userComment={comment} />)
+    console.log(response)
+    content = response!.user_post.comments!.map(item=><UserComments key={item.id} userComment={item}/>)
   } else {
     content = "Loading..."
   }
   return (
     <div className='comments-container'>
-      <p>{data.username} {data.email}</p>
       <CommentForm />
       <div className="comments-lists">
         {content}

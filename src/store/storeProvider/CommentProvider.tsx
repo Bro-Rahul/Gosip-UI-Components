@@ -1,28 +1,13 @@
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, ReactNode } from "react";
 
-export type AuthenticateUser = {
-  id: number | null;
-  username: string;
-  token: string;
-  role: string;
-  website_url: string;
-  email: string;
-};
 
-export const authContext = createContext<AuthenticateUser>({
-  id: null,
-  username: '',
-  token: '',
-  role: '',
-  website_url: '',
-  email: '',
-});
 
-const CommentProvider: React.FC<{ auth:AuthenticateUser,children: ReactNode}> = (props) => {
-  const [logUser, setLogUser] = useState<AuthenticateUser>(props.auth);
+export const authContext = createContext<string>('');
+
+const CommentProvider: React.FC<{ auth:string,children: ReactNode}> = (props) => {
 
   return (
-    <authContext.Provider value={logUser}>
+    <authContext.Provider value={props.auth}>
       {props.children}
     </authContext.Provider>
   );
