@@ -40,7 +40,7 @@ const UserComments:React.FC<{userComment:CommentSchema}> = (props) => {
                         <p onClick={()=>setAddComment(pre=>!pre)}>Add Reply<IoIosAddCircleOutline /></p>
                     </div>
                 </div>
-                {addComment && <CommentForm/>}
+                {addComment && <CommentForm isReplyComment={props.userComment.id} disableAddComment={setAddComment} />}
                 {showSubComments && <div>
                     {subComments.map(comment => <UserComments key={comment.id} userComment={comment} />)}
                 </div>}

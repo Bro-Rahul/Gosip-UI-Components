@@ -35,19 +35,14 @@ interface SecretKeyAndIdentitySchema{
 interface AddCommentTypeSchema{
     created_by:number|string,
     post : number|string,
-    body : string
+    body : string,
 }
-/* interface CommentorData{
-    username : string,
-    website_url : string|null,
-    email : string|null
-} */
-
-/* interface PostUserData{
-    username : string,
-    password : string,
-    cpassword : string,
+interface ReplyCommentSchema{
+    created_by:number|string,
+    post : string,
+    body : string,
+    reply : string|number
+    key : string,
 }
- */
 
-export {PostCommentSchema,CommentSchema,PostSchema,SecretKeyAndIdentitySchema,AddCommentTypeSchema}
+export {PostCommentSchema,CommentSchema,PostSchema,SecretKeyAndIdentitySchema,AddCommentTypeSchema,ReplyCommentSchema}

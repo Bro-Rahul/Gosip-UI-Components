@@ -1,7 +1,6 @@
-import {PostCommentSchema} from "./src/model";
+import {PostCommentSchema,AddCommentTypeSchema,ReplyCommentSchema} from "./src/model";
 import { CommentUserData } from "./src/store/storeProvider/CommentProvider";
 import { CommentSchema } from "./src/model/index";
-import { AddCommentTypeSchema } from "./src/model";
 
 const baseurl = 'http://127.0.0.1:8000'
 
@@ -81,4 +80,26 @@ export async function PostCommentsOnThePost(data:AddCommentTypeSchema):Promise<C
         throw error
     }
     return response.json()
+}
+
+export async function PostReplyCommentOnPost(data:ReplyCommentSchema):Promise<PostCommentSchema>{
+    const url = `${baseurl}/posts-comment/comment-reply/`
+    const body = {
+        reply : data.reply,
+        post : data.post,
+        body : data.body,
+        created_by : data.created_by
+    }
+    const response = await fetch(url,{
+        method:"POST",
+        body : JSON.stringify(body),
+        headers : {
+            'content-type' : 'application/json'
+        }
+    })
+    if(!response.ok){
+        const error = new Error("Can't post the comment reply ")
+        throw error
+    }
+    return fetchPostComments({identity : data.post,key:data.key})
 }

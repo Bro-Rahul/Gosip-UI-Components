@@ -11,9 +11,9 @@ import { commentContext } from '../../store/baseProvider/BaseProvider';
 import { useContext } from 'react';
 import { authContext } from '../../store/storeProvider/CommentProvider';
 
-const PostComment = () => {
-    const {addComment,id} = useContext(commentContext);
-    const {commenter} = useContext(authContext);
+const PostComment:React.FC<{isReply : number , handleDiable:(value: boolean) => void}> = (props) => {
+    const {addComment,addReplyComment,id} = useContext(commentContext);
+    const {commenter,key} = useContext(authContext);
     type CommentBody = {
         body: string;
     };
@@ -22,13 +22,18 @@ const PostComment = () => {
         body: z.string().min(3, "Comment must be at least 3 characters long")
     });
 
-    const { register, handleSubmit, formState: { errors } } = useForm<CommentBody>({
+    const { register, handleSubmit, formState: { errors },reset } = useForm<CommentBody>({
         resolver: zodResolver(schema)
     });
 
     const onSubmit = (data: CommentBody) => {
-        console.log(data);
-        addComment({body:data.body,created_by:commenter.id,post:id});
+        if(props.isReply){
+            addReplyComment({body : data.body,created_by:commenter.id,post:id,reply:props.isReply,key:key})
+        }else{
+            addComment({body:data.body,created_by:commenter.id,post:id});
+        }
+        props.handleDiable(false)
+        reset()
     };
 
     return (
