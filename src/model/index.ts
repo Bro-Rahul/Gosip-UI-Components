@@ -44,5 +44,10 @@ interface ReplyCommentSchema{
     reply : string|number
     key : string,
 }
-
-export {PostCommentSchema,CommentSchema,PostSchema,SecretKeyAndIdentitySchema,AddCommentTypeSchema,ReplyCommentSchema}
+interface DeleteCommentSchema{
+    id : number,
+    token : string,
+    key : string,
+    identity : string
+}
+export {PostCommentSchema,CommentSchema,PostSchema,SecretKeyAndIdentitySchema,AddCommentTypeSchema,ReplyCommentSchema,DeleteCommentSchema}

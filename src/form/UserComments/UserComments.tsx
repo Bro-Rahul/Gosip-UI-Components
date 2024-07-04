@@ -6,15 +6,26 @@ import { CiMenuKebab } from "react-icons/ci";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { CommentSchema } from '../../model';
 import CommentForm from '../CommentForm';
+import ControlMenu from './ControlMenu';
+import { MdOutlineEditCalendar } from "react-icons/md";
+import { useContext } from 'react';
+import { authContext } from '../../store/storeProvider/CommentProvider';
+import { commentContext } from '../../store/baseProvider/BaseProvider';
 
 
 const UserComments:React.FC<{userComment:CommentSchema}> = (props) => {
     const { sub_comments: subComments } = props.userComment;
     const hasSubComments = subComments.length > 0;
-    const [showSubComments, SetShowSubComments] = useState(false)    
-    const [addComment, setAddComment] = useState(false)    
+    const [showSubComments, SetShowSubComments] = useState(false)
+    const [addComment, setAddComment] = useState(false)
+    const [toggleMenu,setToggleMenu] = useState<boolean>(false)
+
+    const {commenter,key} = useContext(authContext);
+    const {deleteComment,id} = useContext(commentContext)
+    const canEdit = commenter.username === props.userComment.user
+
     const DefaultImage:React.FC<{username:string}> = (props)=>  (
-        <div className='default-avatar'>
+        <div>
             {props.username[0]}
         </div>
     )
@@ -27,7 +38,12 @@ const UserComments:React.FC<{userComment:CommentSchema}> = (props) => {
                 <div className='user-comment-username'>
                     <div>
                         <span>{props.userComment.user}</span>
-                        <p><CiMenuKebab className='user-comment-control' /></p>
+                        <div
+                            className='user-comment-control'
+                        >
+                            <CiMenuKebab onClick={()=>setToggleMenu(pre=>!pre)}/>
+                            {toggleMenu && <ControlMenu comment={props.userComment} key={props.userComment.id} />}
+                        </div>
                     </div>
                     <p>{props.userComment.time_period} ago.</p>
                 </div>
@@ -36,8 +52,9 @@ const UserComments:React.FC<{userComment:CommentSchema}> = (props) => {
                     <div>
                         <p><AiOutlineLike /> {!props.userComment.like  ? 0 : props.userComment.like}</p>
                         <p><AiOutlineDislike /> {!props.userComment.dislike ? 0 : props.userComment.dislike}</p>
-                        <p onClick={() => SetShowSubComments(pre => !pre)}>Reply <BsReply />{hasSubComments && subComments.length}</p>
-                        <p onClick={()=>setAddComment(pre=>!pre)}>Add Reply<IoIosAddCircleOutline /></p>
+                        <p onClick={() => SetShowSubComments(pre => !pre)}><BsReply />{hasSubComments && subComments.length} Reply</p>
+                        <p onClick={()=>setAddComment(pre=>!pre)}><IoIosAddCircleOutline /> Add Reply</p>
+                        {canEdit && <p><MdOutlineEditCalendar /> Edit.</p>}
                     </div>
                 </div>
                 {addComment && <CommentForm isReplyComment={props.userComment.id} disableAddComment={setAddComment} />}

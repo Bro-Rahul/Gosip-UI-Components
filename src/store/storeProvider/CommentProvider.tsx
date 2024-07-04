@@ -6,6 +6,7 @@ interface CommentUserData{
   username : string|null,
   role : string|null,
   email : string|null,
+  profile : string|null
 }
 
 interface ContextSechema {
@@ -23,6 +24,7 @@ export const authContext = createContext<ContextSechema>({
     role :null,
     token :null,
     username :null,
+    profile : null
   },
   autheticated : false,
   login : (userData:CommentUserData)=>{}
@@ -38,7 +40,8 @@ const CommentProvider: React.FC<{ auth:string,children: ReactNode}> = (props) =>
         id : '',
         role :null,
         token :null,
-        username :null
+        username :null,
+        profile:null
       }
   }else{
     const data:any = localStorage.getItem('user')
@@ -58,7 +61,8 @@ const CommentProvider: React.FC<{ auth:string,children: ReactNode}> = (props) =>
         token : userData.token,
         id : userData.id,
         role : userData.role,
-        username : userData.username
+        username : userData.username,
+        profile : userData.profile
       },
       autheticated : true,
     }));

@@ -3,8 +3,8 @@ import UserComments from '../../form/UserComments/UserComments';
 import CommentForm from '../../form/CommentForm';
 import { useContext } from 'react';
 import { commentContext } from '../../store/baseProvider/BaseProvider';
-import "../../../global.css"
-
+/* import "../../../global.css" */
+import "../../../test.css"
 const Comments: React.FC= (props) => {
 
   const {comments} = useContext(commentContext);

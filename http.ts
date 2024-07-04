@@ -1,4 +1,4 @@
-import {PostCommentSchema,AddCommentTypeSchema,ReplyCommentSchema} from "./src/model";
+import {PostCommentSchema,AddCommentTypeSchema,ReplyCommentSchema,DeleteCommentSchema} from "./src/model";
 import { CommentUserData } from "./src/store/storeProvider/CommentProvider";
 import { CommentSchema } from "./src/model/index";
 
@@ -102,4 +102,21 @@ export async function PostReplyCommentOnPost(data:ReplyCommentSchema):Promise<Po
         throw error
     }
     return fetchPostComments({identity : data.post,key:data.key})
+}
+
+
+export async function deleteComment(body:DeleteCommentSchema){
+    const url = `${baseurl}/posts-comment/${body.id}/delete-comment/`
+    const response = await fetch(url,{
+        method : "DELETE",
+        headers:{
+            'content-type' : 'application/json',
+            'Authorization' : `token ${body.token}`
+        }
+    })
+    if(!response.ok){
+        const error = new Error('Can not delete the comment for some reason ')
+        throw error
+    }
+    return fetchPostComments({identity : body.identity,key : body.key});
 }

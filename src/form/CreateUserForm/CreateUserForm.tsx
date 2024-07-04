@@ -11,7 +11,6 @@ import { fetchUserData } from '../../../http';
 import { authContext } from '../../store/storeProvider/CommentProvider';
 import { useContext } from 'react';
 
-
 type UserFormType = {
     username : string,
     password : string,
@@ -21,7 +20,7 @@ type UserFormType = {
 
 const schema:ZodType<UserFormType> = z.object({
     username : z.string().max(30).min(3),
-    password : z.string().min(5).max(30),
+    password : z.string().min(3).max(30),
     cpassword : z.string(),
     email : z.string().email('Enter a Valid email ')
 }).refine(data=>data.cpassword === data.password ,{
@@ -41,7 +40,6 @@ const CreateUserForm = () => {
     const onSubmitLogin = async (data:UserFormType)=>{
         try{
             const response = await fetchUserData(data)
-            console.log(response)
             login(response)
             localStorage.setItem('user',JSON.stringify(response))
         }catch(error){
