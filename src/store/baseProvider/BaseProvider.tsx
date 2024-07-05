@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
 import { authContext, ContextSechema } from "../storeProvider/CommentProvider";
-import { CommentSchema, SecretKeyAndIdentitySchema, AddCommentTypeSchema, ReplyCommentSchema,DeleteCommentSchema } from "../../model";
-import { PostCommentsOnThePost, PostReplyCommentOnPost,deleteComment } from "../../../http";
+import { CommentSchema, SecretKeyAndIdentitySchema, AddCommentTypeSchema, ReplyCommentSchema,DeleteCommentSchema,UpdateCommentSechema } from "../../model";
+import { PostCommentsOnThePost, PostReplyCommentOnPost,deleteComment,updateComment } from "../../../http";
 import { Comments } from "../../components";
 import useComments from "../../hook/useComment";
 
@@ -12,7 +12,8 @@ interface CommentContext {
     error: boolean,
     addComment: (body: AddCommentTypeSchema) => void,
     addReplyComment: (body: ReplyCommentSchema) => void,
-    deleteComment : (body : DeleteCommentSchema) => void
+    deleteComment : (body : DeleteCommentSchema) => void,
+    updateUserComment : (body:UpdateCommentSechema) => void
 }
 
 
@@ -21,9 +22,10 @@ export const commentContext = createContext<CommentContext>({
     comments: [],
     error: false,
     loading: false,
-    addComment: (body: AddCommentTypeSchema) => { },
-    addReplyComment: (body: ReplyCommentSchema) => { },
-    deleteComment : (body:DeleteCommentSchema)=>{} 
+    addComment: (body: AddCommentTypeSchema) => {},
+    addReplyComment: (body: ReplyCommentSchema) => {},
+    deleteComment : (body:DeleteCommentSchema)=> {},
+    updateUserComment : (body:UpdateCommentSechema)=> {}
 });
 
 const BaseProvider: React.FC<{ post_id: string, children: ReactNode }> = (props) => {
@@ -107,6 +109,31 @@ const BaseProvider: React.FC<{ post_id: string, children: ReactNode }> = (props)
                     error: true,
                     loading: false
                 }));
+            }
+        },
+        updateUserComment: async (body:UpdateCommentSechema)=>{
+            try{
+                const response = await updateComment(body);
+                setCommentsList(pre=>({
+                    ...pre,
+                    comments : pre.comments.map(item=>{
+                        if(item.id === body.id){
+                            return {
+                                ...response
+                            }
+                        }else{
+                            return item;
+                        }
+                    }),
+                    loading : false,
+                    error : false,
+                }));
+            }catch(err){
+                setCommentsList(pre=>({
+                    ...pre,
+                    error:true,
+                    loading : false
+                }))
             }
         }
     });

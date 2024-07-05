@@ -50,4 +50,12 @@ interface DeleteCommentSchema{
     key : string,
     identity : string
 }
-export {PostCommentSchema,CommentSchema,PostSchema,SecretKeyAndIdentitySchema,AddCommentTypeSchema,ReplyCommentSchema,DeleteCommentSchema}
+interface UpdateCommentSechema{
+    id : number,
+    body : string,
+    token : string,
+    created_by : number,
+    post:string
+}
+
+export {PostCommentSchema,CommentSchema,PostSchema,SecretKeyAndIdentitySchema,AddCommentTypeSchema,ReplyCommentSchema,DeleteCommentSchema,UpdateCommentSechema}

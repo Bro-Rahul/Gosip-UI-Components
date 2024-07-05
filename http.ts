@@ -1,4 +1,4 @@
-import {PostCommentSchema,AddCommentTypeSchema,ReplyCommentSchema,DeleteCommentSchema} from "./src/model";
+import {PostCommentSchema,AddCommentTypeSchema,ReplyCommentSchema,DeleteCommentSchema,UpdateCommentSechema} from "./src/model";
 import { CommentUserData } from "./src/store/storeProvider/CommentProvider";
 import { CommentSchema } from "./src/model/index";
 
@@ -119,4 +119,27 @@ export async function deleteComment(body:DeleteCommentSchema){
         throw error
     }
     return fetchPostComments({identity : body.identity,key : body.key});
+}
+
+export async function updateComment(comment:UpdateCommentSechema):Promise<CommentSchema>{
+    const url = `${baseurl}/posts-comment/${comment.id}/update-user-comment/`;
+    const patchData = {
+        post : comment.post,
+        created_by : comment.created_by,
+        body:comment.body
+    }
+    const response = await fetch(url,{
+        method:"PATCH",
+        body : JSON.stringify(patchData),
+        headers : {
+            'content-type' : 'application/json',
+            'Authorization' : `token ${comment.token}`
+        }
+    });
+    if(!response.ok){
+        const error = new Error("can't update the post in the backend for some reason!")
+        alert("can 't update the comment at this moment please try again later !")
+        throw error
+    }
+    return response.json();
 }
