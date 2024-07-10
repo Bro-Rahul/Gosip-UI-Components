@@ -1,1 +1,1 @@
-export {default} from "./useComment"
+export {default as useComments} from './useComment'

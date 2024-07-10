@@ -2,6 +2,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import typescript from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
+import url from '@rollup/plugin-url';
 
 //NEW
 import terser from '@rollup/plugin-terser'
@@ -22,7 +23,12 @@ export default [
       },
     ],
     plugins: [
-      // NEW
+      url({
+        include: ['**/*.png', '**/*.jpg', '**/*.gif', '**/*.svg'],
+        limit: 22528, // Inline files smaller than 22kb
+        emitFiles: true, // Emit files larger than the limit
+        fileName: '[name][extname]', // Filename pattern for emitted files
+      }),
       typescript(),
       peerDepsExternal(),
 

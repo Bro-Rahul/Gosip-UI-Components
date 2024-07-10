@@ -1,2 +1,2 @@
-export {default as CommentsProvider} from './storeProvider'
-export {default as CommentSection} from './baseProvider'
+export {default as CommentProvider} from './authStore'
+export {default as CommentSection} from './commentStore'

@@ -1,25 +1,54 @@
-import React from 'react'
-import PostComment from '../../components/PostComment';
-import CreateUserForm from '../../form/CreateUserForm'
-import UserAvatar from '../../components/UserAvatar';
-import { authContext, ContextSechema } from '../../store/storeProvider/CommentProvider';
-import { useContext } from 'react';
+import React,{useContext} from 'react'
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z, ZodType } from 'zod';
+import { commentContext } from '../../store/commentStore/CommentStore'; 
+import { authContext } from '../../store/authStore/AuthStore';
 
-const CommentForm:React.FC<{isReplyComment : number,disableAddComment: (value: boolean) => void}> = (props) => {
-    const { autheticated } = useContext<ContextSechema>(authContext)
-    return (
-        <div className='comment-form-container'>
-            <div className='comment-form-top'>
-                <UserAvatar />
-                <PostComment isReply={props.isReplyComment} handleDiable = {props.disableAddComment} />
-            </div>
-            {!autheticated &&
-                <div className='comment-from-create-user'>
-                    <CreateUserForm />
-                </div>
-            }
-        </div>
-    )
+interface CommentFormProps{
+    reply_id : number    // this will be store the id
 }
 
-export default CommentForm
+const CommentForm: React.FC<CommentFormProps> = ({reply_id}) => {
+    const {commenter,autheticated} = useContext(authContext);
+    const  {post_id,addReplyComment,addComment} = useContext(commentContext);
+    type CommentBody = {
+        body: string;
+    };
+
+    const schema: ZodType<CommentBody> = z.object({
+        body: z.string().min(3, "Comment must be at least 3 characters long")
+    });
+
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<CommentBody>({
+        resolver: zodResolver(schema)
+    });
+
+    const onSubmit = (data: CommentBody) => {
+        console.log(data);
+        if(autheticated){
+            if(reply_id){
+                addReplyComment({body:data.body,created_by:commenter.id,post:post_id,reply:reply_id,token:commenter.token});
+            }else{
+                addComment({body:data.body,created_by:commenter.id,post:post_id,token:commenter.token});
+            }
+        }else{
+            alert('please login first to add a comment');
+        }
+        reset()
+    };
+
+    return (
+        <form className='comment-form' onSubmit={handleSubmit(onSubmit)}>
+            <div>
+                <textarea className='textarea' placeholder='Join The Discussion...'  {...register('body')}></textarea>
+                <p className='error'>{errors.body?.message}</p>
+            </div>
+            <div>
+                <button className='comment-btn'>Comment</button>
+            </div>
+        </form>
+    );
+}
+
+export default CommentForm;
