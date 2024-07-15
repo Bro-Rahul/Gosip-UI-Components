@@ -9,9 +9,11 @@ import { authContext } from '../../store/authStore/AuthStore';
 
 const Comment: React.FC = () => {
   const [loginOptions, setLoginOptions] = useState<boolean>(false);
-  const {mainComments} = useContext(commentContext);
+  const {mainComments,comments} = useContext(commentContext);
   const {autheticated,logout} = useContext(authContext);
-  const content = mainComments.map(comment=> <UserComment key={comment.id} comment={comment}/>)
+
+  const comment = comments.filter(comm => mainComments.includes(comm.id));
+  const content = comment.map(item=> <UserComment comment={item} key={item.id}/>)
 
   const handleLogout = ()=>{
     const reponse = confirm("Do you want to Logout ?");

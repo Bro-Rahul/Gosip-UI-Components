@@ -27,7 +27,7 @@ const CommentForm: React.FC<CommentFormProps> = ({reply_id}) => {
     const onSubmit = (data: CommentBody) => {
         console.log(data);
         if(autheticated){
-            if(reply_id){
+            if(reply_id){   // an non zero number is consider an reply here as 0 is false so it a main comment on the post
                 addReplyComment({body:data.body,created_by:commenter.id,post:post_id,reply:reply_id,token:commenter.token});
             }else{
                 addComment({body:data.body,created_by:commenter.id,post:post_id,token:commenter.token});

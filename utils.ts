@@ -13,24 +13,41 @@ function filterSubComments(allComments:CommentSchema[],comment:CommentSchema):nu
     return newList;
 }
 
-function SortMainComments(allComments:CommentSchema[]):CommentSchema[]{
-    const mainComments:number[] = [];
-    const subComments:number[] = []
-    for(const comment of allComments){
-        if(mainComments.length === 0){
-            mainComments.push(comment.id);
-            subComments.push(...comment.sub_comments);
-        }else{
-            if(!subComments.includes(comment.id)){
-                mainComments.push(comment.id);
-                subComments.push(...comment.sub_comments);
-            }
-        }   
+function mainCommentsHelper(allComments:CommentSchema[],comment:CommentSchema,seenCommentList:number[],mainCommentList:number[]){
+    if(!comment.sub_comments && seenCommentList.includes(comment.id)){
+
+    }else if(!comment.sub_comments && !seenCommentList.includes(comment.id)){
+        seenCommentList.push(comment.id);
+        mainCommentList.push(comment.id);
+    }else{
+        if(!seenCommentList.includes(comment.id)){
+            mainCommentList.push(comment.id);
+            seenCommentList.push(comment.id);
+        }
     }
-    const coments:CommentSchema[] = allComments.filter(comment=>mainComments.includes(comment.id));
-    return coments; 
+    for(const id of comment.sub_comments){
+        const subComment = allComments.find(com => com.id === id)!;
+        seenCommentList.push(id);
+        mainCommentsHelper(allComments,subComment,seenCommentList,mainCommentList);
+    }
 }
+
+
+function mainComments(allComments:CommentSchema[]):number[]{
+    const mainCommentsIdList:number[] = [];
+    const visited:number[] = [];
+    for(const comment of allComments){
+        mainCommentsHelper(allComments,comment,visited,mainCommentsIdList);
+    }
+    return mainCommentsIdList;
+}
+
+function filterSubCommentsAtSingleLevel(allComments:CommentSchema[],comment:CommentSchema):CommentSchema[]{
+    return allComments.filter(item=> comment.sub_comments.includes(item.id));
+}
+
 export {
     filterSubComments,
-    SortMainComments
+    mainComments,
+    filterSubCommentsAtSingleLevel
 }

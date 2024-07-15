@@ -1,7 +1,14 @@
 interface SecretKeyIdentitySchema{
     key:string,
     identity : string;
-    post : MetaDataSchema
+    post : MetaDataSchema,
+}
+
+interface SecretKeyIdentityCommenterIdSchema{
+    key : string,
+    identity : string,
+    post : MetaDataSchema,
+    user_id : number|null
 }
 
 interface CommentSchema{
@@ -78,11 +85,18 @@ interface UserForm{
     email : string
 }
 
+interface VoteSchema{
+    user : number,
+    comment : number,
+    vote : null|string
+}
+
 
 export {
     PostCommentSchema,
     CommentSchema,
     SecretKeyIdentitySchema,
+    SecretKeyIdentityCommenterIdSchema,
     AddCommentSchema,
     ReplyCommentSchema,
     DeleteCommentSchema,
@@ -90,5 +104,6 @@ export {
     MetaDataSchema,
     PostSchema,
     CommenterUserData,
-    UserForm
+    UserForm,
+    VoteSchema
 }

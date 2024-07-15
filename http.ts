@@ -7,7 +7,8 @@ import
         CommenterUserData,
         ReplyCommentSchema,
         UpdateCommentSechema,
-        DeleteCommentSchema
+        DeleteCommentSchema,
+        VoteSchema
     } 
 from "./src/schema";
 
@@ -134,4 +135,20 @@ export async function deleteUserComment(body:DeleteCommentSchema):Promise<number
         throw error
     }
     return body.id;
+}
+
+export async function handleVoteOnComments(body:VoteSchema):Promise<{vote:string|null}>{
+    const url = `${baseurl}/comment/handle-like-dislike/`
+    const response = await fetch(url,{
+        method : "POST",
+        headers : {
+            'content-type' : 'application/json',
+        },
+        body:JSON.stringify(body)
+    });
+    if(!response.ok){
+        const err = new Error('cant record the vote at this moment !');
+        throw err;
+    }
+    return response.json();
 }
